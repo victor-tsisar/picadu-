@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Picadu - Main</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- header -->
+    <header class="header">
+        <div class="container header__wrapper">
+            <a href="/" class="header__logo">
+                <img class="logo" src="images/logo.svg" alt="logo">
+            </a>
+            <nav class="menu">
+                <ul class="menu__list">
+                    <li class="menu__item">
+                        <a class="menu__link" href="#">Свежее</a>
+                    </li>
+                    <li class="menu__item">
+                        <a class="menu__link" href="#">Лучшее</a>
+                    </li>
+                    <li class="menu__item">
+                        <a class="menu__link" href="#">Горячее</a>
+                    </li>
+                    <li class="menu__item">
+                        <a class="menu__link" href="#">Подписки</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="input-group search">
+                <input class="search__input" type="search" placeholder="Поиск по сайту">
+                <button class="search__btn">
+                    <img class="search__icon" src="images/search.svg" alt="Search">
+                </button>
+            </div>
+            <a href="#" id="menu-toggle" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+        </div>
+    </header>
+    <!-- /.header -->
+
+    <div class="content container">
+        <main class="posts">
+            <!-- posts -->
+            <section class="post">
+                <div class="post__body">
+                    <h2 class="post__title title">ШПАРГАЛКА ДЛЯ МОЛНИЕНОСНОСТНОЙ ВЕРСТКИ</h2>
+                    <p class="post__text text">
+                        Сокращение при помощи плагина EMMET, позволяет значительно увеличить скорость верстки за счет
+                        комбинации команд и аббревиатур. Так же можно дополнительно делать свои аббревиатуры.
+                    </p>
+                    <p class="post__text text">
+                        EMMET прост в установке интегрируется в такие редакторы как PHPStorm,
+                        Sublime Text, Adobe Dreamviewer, Notepad++, WebStorm, Aptana, Coda, TextMate, Eclipse,
+                        CodeMirror, Brackets, Emacs, HippoEDIT, HTML-Kit и други, полный их перечень найдете на сайте
+                        EMMET.
+                    </p>
+                    <!-- tags -->
+                    <div class="tags">
+                        <a class="tag" href="#">#свежее</a>
+                        <a class="tag" href="#">#горячее</a>
+                        <a class="tag" href="#">#мое</a>
+                        <a class="tag" href="#">#случайность</a>
+                    </div>
+                    <!-- /.tags -->
+                </div>
+                <div class="post__footer">
+                    <div class="post__btns">
+                        <button class="likes post__btn">
+                            <svg class="icon icon-like" width="19" height="20">
+                                <use xlink:href="images/icons.svg#like"></use>
+                            </svg>
+                            <span class="likes__counter">26</span>
+                        </button>
+                        <button class="comments post__btn">
+                            <svg class="icon icon-comment" width="21" height="21">
+                                <use xlink:href="images/icons.svg#comment"></use>
+                            </svg>
+                            <span class="comments__counter">157</span>
+                        </button>
+                        <button class="save post__btn">
+                            <svg class="icon icon-save" width="19" height="19">
+                                <use xlink:href="images/icons.svg#save"></use>
+                            </svg>
+                        </button>
+                        <button class="share post__btn">
+                            <svg class="icon icon-share" width="17" height="19">
+                                <use xlink:href="images/icons.svg#share"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="post__author">
+                        <div class="author__about">
+                            <a href="#" class="author__username">victor</a>
+                            <span class="post__time">5 минут назад</span>
+                        </div>
+                        <a href="#" class="author__link">
+                            <img class="author__avatar" src="images/avatar.jpg" alt="avatar">
+                        </a>
+                    </div>
+                </div>
+                <!-- /.post__footer -->
+            </section>
+            <!-- /.post -->
+            <section class="post">
+                <div class="post__body">
+                    <h2 class="post__title title">Преимущества Sass</h2>
+                    <p class="post__text text">
+                        Полная совместимость с CSS <br>
+                        Sass полностью совместим со всеми версиями CSS. Мы уделяем серьезное внимание совместимости,
+                        поэтому вы можете легко
+                        использовать любые доступные библиотеки CSS.
+                    </p>
+                    <p class="post__text text">
+                        Богатая функциональность <br>
+                        Sass может похвастаться большим количеством возможностей, чем любой другой язык расширения CSS.
+                        Команда Sass Core
+                        бесконечно работает не только для поддержания этих возможностей, но и для того, чтобы быть
+                        впереди. Sass находится в активной разработке более 8 лет.
+                    </p>
+                    <p class="post__text text">
+                        Фреймворки <br>
+                        Есть бесконечное количество фреймворков, построенных на Sass. Compass, Bourbon и Susy - это
+                        только несколько примеров из
+                        всего количества.
+                    </p>
+                    <!-- tags -->
+                    <div class="tags">
+                        <a class="tag" href="#">#свежее</a>
+                        <a class="tag" href="#">#горячее</a>
+                        <a class="tag" href="#">#мое</a>
+                        <a class="tag" href="#">#случайность</a>
+                    </div>
+                    <!-- /.tags -->
+                </div>
+                <div class="post__footer">
+                    <div class="post__btns">
+                        <button class="likes post__btn">
+                            <svg class="icon icon-like" width="19" height="20">
+                                <use xlink:href="images/icons.svg#like"></use>
+                            </svg>
+                            <span class="likes__counter">192</span>
+                        </button>
+                        <button class="comments post__btn">
+                            <svg class="icon icon-comment" width="21" height="21">
+                                <use xlink:href="images/icons.svg#comment"></use>
+                            </svg>
+                            <span class="comments__counter">48</span>
+                        </button>
+                        <button class="save post__btn">
+                            <svg class="icon icon-save" width="19" height="19">
+                                <use xlink:href="images/icons.svg#save"></use>
+                            </svg>
+                        </button>
+                        <button class="share post__btn">
+                            <svg class="icon icon-share" width="17" height="19">
+                                <use xlink:href="images/icons.svg#share"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="post__author">
+                        <div class="author__about">
+                            <a href="#" class="author__username">victor</a>
+                            <span class="post__time">2 часа назад</span>
+                        </div>
+                        <a href="#" class="author__link">
+                            <img class="author__avatar" src="images/avatar.jpg" alt="avatar">
+                        </a>
+                    </div>
+                </div>
+                <!-- /.post__footer -->
+            </section>
+            <!-- /.post -->
+
+            <section class="post">
+                <div class="post__body">
+                    <h2 class="post__title title">Опановуємо основи алгоритмів</h2>
+                    <p class="post__text text">
+                        Коли на співбесідах запитую, як можна підвищити продуктивність роботи вебсервісу, основними відповідями є вертикальне та
+                        горизонтальне масштабування, використання різних типів кешів, створення індексів у базі даних і написання оптимальніших
+                        запитів у базу даних. Звичайно, відповідь є правильною, але неповною. Мало хто згадує, що поліпшити роботу програми
+                        можна написанням оптимальніших алгоритмів або використанням структур даних, які краще розв’яжуть певну задачу.
+                    </p>
+                    <p class="post__text text">
+                        Оскільки зараз процесорний час порівняно дешевий і оперативна пам’ять також, від програмістів не вимагають писати
+                        супероптимальні програми. Бо порівняно з процесорним часом і оперативною пам’яттю час програміста дуже дорогий.
+                        Написання оптимізованих програм може тривати справді довго.
+                        <em><a href="https://dou.ua/lenta/articles/why-understanding-algorithms-is-important/?from=comment-digest_post&utm_source=transactional&utm_medium=email&utm_campaign=digest-comments">
+                        Детальніше...</a></em>
+                    </p>
+                    <!-- tags -->
+                    <div class="tags">
+                        <a class="tag" href="#">#свежее</a>
+                        <a class="tag" href="#">#горячее</a>
+                        <a class="tag" href="#">#мое</a>
+                        <a class="tag" href="#">#случайность</a>
+                    </div>
+                    <!-- /.tags -->
+                </div>
+                <div class="post__footer">
+                    <div class="post__btns">
+                        <button class="likes post__btn">
+                            <svg class="icon icon-like" width="19" height="20">
+                                <use xlink:href="images/icons.svg#like"></use>
+                            </svg>
+                            <span class="likes__counter">238</span>
+                        </button>
+                        <button class="comments post__btn">
+                            <svg class="icon icon-comment" width="21" height="21">
+                                <use xlink:href="images/icons.svg#comment"></use>
+                            </svg>
+                            <span class="comments__counter">27</span>
+                        </button>
+                        <button class="save post__btn">
+                            <svg class="icon icon-save" width="19" height="19">
+                                <use xlink:href="images/icons.svg#save"></use>
+                            </svg>
+                        </button>
+                        <button class="share post__btn">
+                            <svg class="icon icon-share" width="17" height="19">
+                                <use xlink:href="images/icons.svg#share"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="post__author">
+                        <div class="author__about">
+                            <a href="#" class="author__username">victor</a>
+                            <span class="post__time">1 день назад</span>
+                        </div>
+                        <a href="#" class="author__link">
+                            <img class="author__avatar" src="images/avatar.jpg" alt="avatar">
+                        </a>
+                    </div>
+                </div>
+                <!-- /.post__footer -->
+            </section>
+            <!-- /.post -->
+        </main>
+        <!-- /.posts -->
+
+        <aside class="sidebar">
+            <div class="user">
+                <a href="#" class="user__info">
+                    <img src="images/avatar.jpg" alt="user: photo" class="user__avatar" width="40" height="40">
+                    <span class="user__name">victor</span>
+                </a>
+                <!-- /.user__info -->
+                <a href="#" class="exit">
+                    <svg class="icon icon-exit">
+                        <use xlink:href="images/icons.svg#exit"></use>
+                    </svg>
+                </a>
+                <!-- /.exit -->
+            </div>
+            <nav class="sidebar__menu">
+                <ul class="sidebar__list">
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Ответы</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Комментарии</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link active">Оценки</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Сохраненное</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Подписки</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Заметки</a>
+                    </li>
+                    <li class="sidebar__item">
+                        <a href="#" class="sidebar__link">Игнор-лист</a>
+                    </li>
+                </ul>
+            </nav>
+            <a class="button button__new-post" href="new-post.html">
+                <svg class="icon icon-fire">
+                    <use xlink:href="images/icons.svg#fire"></use>
+                </svg>
+                Опубликовать пост
+            </a>
+            <!-- /.button__new-post -->
+
+            <div class="card">
+                <a class="card__header" href="#">
+                    <h2 class="card__title title">Комментарий дня</h2>
+                </a>
+                <div class="card__body">
+                    <a class="card__body-title title" href="#">Как обмануть банкомат, если вы хотите снять больше наличных</a>
+                    <p class="card__body-text">
+                        Таким образом укрепление и развитие структуры требуют от нас анализа форм развития. Не следует,
+                        однако забывать, что
+                        реализация намеченных плановых заданий требуют от нас анализа позиций, занимаемых участниками в
+                        отношении поставленных
+                        задач. Задача организации, в особенности же консультация...
+                    </p>
+                </div>
+            </div>
+            <!-- /.card -->
+            <a class="promo" href="#"></a>
+            <!-- /.promo -->
+        </aside>
+        <!-- /.sidebar -->
+    </div>
+    <!-- /.content -->
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
