@@ -248,6 +248,28 @@
         <!-- /.posts -->
 
         <aside class="sidebar">
+            <div class="login">
+                <form class="login__form">
+                    <h2 class="login__title title">Авторизация</h2>
+                    <input type="email"
+                        class="login__input login__email"
+                        name="email"
+                        minlength="3"
+                        placeholder="Введите email"
+                        required>
+
+                    <input type="password" 
+                        class="login__input login__password"
+                        name="email" 
+                        minlength="3" 
+                        placeholder="Введите пароль"
+                        required>
+
+                    <a class="login__forget" href="#">Забыли пароль?</a>
+                    <button class="login__signin" type="submit">Войти</button>
+                    <a class="login__signup" href="#">Регистрация</a>
+                </form>
+            </div>
             <div class="user">
                 <a href="#" class="user__info">
                     <img src="images/avatar.jpg" alt="user: photo" class="user__avatar" width="40" height="40">

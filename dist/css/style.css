@@ -370,7 +370,8 @@ input {
   width: 31%;
 }
 
-.sidebar__menu {
+.sidebar__menu {  
+  display: none;
   background-color: #fff;
   border: 1px solid #e8e8e8;
   border-top: none;
@@ -393,6 +394,87 @@ input {
   background-color: #fffbe6;
   border-right: 3px solid #faad14;
 }
+
+/* Стили для формы / JS-функционал */
+.login {
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
+  padding: 15px 25px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.login__form {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.login__title {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #595959;
+}
+
+.login__input {
+  display: block;
+  background-color: #fff;
+  border: 1px solid #e8e8e8;
+  padding: 5px 15px;
+  margin-bottom: 15px;  
+}
+
+.login__forget {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px; 
+  color: #262626;
+}
+
+.login__signin {
+  background: #faad14;
+  border-radius: 2px;
+  padding: 0px 5px;
+  line-height: 32px;
+  color: #fff;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.login__signin:hover {
+  color: #000;
+}
+
+.login__signin:active {
+  filter: brightness(90%);
+}
+
+.login__signup {
+  color: #faad14;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.login__signup:hover,
+.login__forget:hover {
+  text-decoration: underline;
+}
+/* end Стили для формы / JS-функционал */
 
 .user {
   background-color: #fafafa;
@@ -457,7 +539,7 @@ input {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
