@@ -443,7 +443,8 @@ input {
   color: #262626;
 }
 
-.login__signin {
+.login__signin,
+.edit__btn {
   background: #faad14;
   border-radius: 2px;
   padding: 0px 5px;
@@ -454,11 +455,13 @@ input {
   margin-bottom: 15px;
 }
 
-.login__signin:hover {
+.login__signin:hover,
+.edit__btn:hover {
   color: #000;
 }
 
-.login__signin:active {
+.login__signin:active,
+.edit__btn:active {
   filter: brightness(90%);
 }
 
@@ -474,24 +477,72 @@ input {
 .login__forget:hover {
   text-decoration: underline;
 }
+
+.edit {
+  margin-right: 15px;  
+}
+
+.edit__container {
+  margin-top: 10px;
+  display: none;
+}
+
+.edit__container.visible {
+  display: block;
+}
+
+.edit__title {
+  text-align: center;
+  text-transform: uppercase;
+  color: #595959;
+}
+
+.edit__label {
+  display: block;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.edit__input {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px 10px;
+  border: 1px solid #8c8c8c;
+}
+
+.edit__btn {
+  width: 100%;
+}
+
+.icon-edit {
+  width: 20px;
+  height: 20px;
+}
+/* .icon-edit:hover:active {
+  fill: #fa8c16;
+} */
 /* end Стили для формы / JS-функционал */
 
 .user {
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
-  padding: 15px 25px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  padding: 15px 25px;  
+}
+
+.user__container {
+display: -webkit-box;
+display: -webkit-flex;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-align: center;
+-webkit-align-items: center;
+-ms-flex-align: center;
+align-items: center;
+-webkit-box-pack: justify;
+-webkit-justify-content: space-between;
+-ms-flex-pack: justify;
+justify-content: space-between;
 }
 
 .user__info {
@@ -503,11 +554,13 @@ input {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-right: auto;
 }
 
 .user__avatar {
   border-radius: 50%;
   margin-right: 17px;
+  object-fit: cover;
 }
 
 .user__name {
