@@ -1,4 +1,20 @@
 'use strict;'
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyC96aC1pToGjSoRZOUySNmDGILMWrS76To",
+    authDomain: "picadu-f9041.firebaseapp.com",
+    databaseURL: "https://picadu-f9041.firebaseio.com",
+    projectId: "picadu-f9041",
+    storageBucket: "picadu-f9041.appspot.com",
+    messagingSenderId: "747110056656",
+    appId: "1:747110056656:web:eb85870bc538357dab94d5"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+console.log(firebase);
+
 // Скрипт с урока верстки
 let menu = document.querySelector('.sidebar');
 let menuToggle = document.querySelector('#menu-toggle');
@@ -25,24 +41,28 @@ const userAvatarElem = document.querySelector('.user__avatar');
 
 const postsWrapper = document.querySelector('.posts');
 
+const buttonNewPost = document.querySelector('.button__new-post');
+const addPostElem = document.querySelector('.add__post');
+
 // Пользователи (база)
 const listUsers = [
     {
         id: '01',
         email: 'victrun@gmail.com',
         password: '12345',
-        displayName: 'victor'
+        displayName: 'victor',
+        photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg'
     },
     {
         id: '02',
         email: 'kate@mail.ru',
         password: '112233',
-        displayName: 'kate123'
+        displayName: 'kate',
+        photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTShHa5ocpKUoavy9CUwwBycXIVhyiB1RkmcQ&usqp=CAU'
     }
 ];
 
 // Форма авторизации/регистрации
-
 const setUsers = {
     user: null,
     // Авторизация нового пользователя
@@ -61,11 +81,16 @@ const setUsers = {
             alert('Пользователь с такими даными не найден')
         }
 
+        if (handler) {
+            handler();
+        }
         console.log(email, password);
     },
     logOut(handler) {
         this.user = null;
-        handler();
+        if (handler) {
+            handler();
+        }
     },
     // Регистрация нового пользователя
     signUp(email, password, handler) {
@@ -93,6 +118,10 @@ const setUsers = {
         } else {
             alert('Пользователь с такими даными уже зарегистрирован!')
         }
+
+        if (handler) {
+            handler();
+        }
     },
     // Прийом логина пользователя и аватара
     editUser(userName, userPhoto = '', handler) {
@@ -102,7 +131,9 @@ const setUsers = {
         if (userPhoto) {
             this.user.photo = userPhoto;
         }
-        handler();
+        if (handler) {
+            handler();
+        }
     },
     // Проверка e-mail пользователя в базе listUsers
     getUser(email) {
@@ -124,9 +155,13 @@ const toggleAuthDom = () => {
         userElem.style.display = '';
         userNameElem.textContent = user.displayName;
         userAvatarElem.src = user.photo || userAvatarElem.src;  // Добавление аватара или оставить по умолчанию
+        buttonNewPost.classList.add('visible');  //Отображение кнопки публикации поста        
     } else {
         loginElem.style.display = '';
         userElem.style.display = 'none';
+        buttonNewPost.classList.remove('visible');
+        addPostElem.classList.remove('visible');
+        postsWrapper.classList.add('visible');
     }
 };
 
@@ -137,7 +172,7 @@ const setPosts = {
             title: 'ШПАРГАЛКА ДЛЯ МОЛНИЕНОСНОСТНОЙ ВЕРСТКИ',
             text: 'Сокращение при помощи плагина EMMET, позволяет значительно увеличить скорость верстки за счет комбинации команд и аббревиатур.Так же можно дополнительно делать свои аббревиатуры. <p> EMMET прост в установке интегрируется в такие редакторы как PHPStorm, Sublime Text, Adobe Dreamviewer, Notepad++, WebStorm, Aptana, Coda, TextMate, Eclipse, CodeMirror, Brackets, Emacs, HippoEDIT, HTML - Kit и други, полный их перечень найдете на сайте EMMET.</p>',
             tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: 'victrun@gmail.com',
+            author: { displayName: 'victor', photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg'},
             date: '11.10.2020, 10:54:00',
             like: 45,
             comments: 20,
@@ -146,7 +181,7 @@ const setPosts = {
             title: 'Преимущества Sass',
             text: 'Полная совместимость с CSS <br> Sass полностью совместим со всеми версиями CSS.Мы уделяем серьезное внимание совместимости, поэтому вы можете легко использовать любые доступные библиотеки CSS. <p> Богатая функциональность <br> Sass может похвастаться большим количеством возможностей, чем любой другой язык расширения CSS. Команда Sass Core бесконечно работает не только для поддержания этих возможностей, но и для того, чтобы быть впереди. Sass находится в активной разработке более 8 лет. </p> <p> Фреймворки <br> Есть бесконечное количество фреймворков, построенных на Sass. Compass, Bourbon и Susy - это только несколько примеров из всего количества.</p>', 
             tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: 'kate@mail.ru',
+            author: { displayName: 'Kate', photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTShHa5ocpKUoavy9CUwwBycXIVhyiB1RkmcQ&usqp=CAU' },
             date: '10.11.2020, 20:05:00',
             like: 68,
             comments: 17,
@@ -155,17 +190,43 @@ const setPosts = {
             title: 'Опановуємо основи алгоритмів',
             text: 'Коли на співбесідах запитую, як можна підвищити продуктивність роботи вебсервісу, основними відповідями є вертикальне та  горизонтальне масштабування, використання різних типів кешів, створення індексів у базі даних і написання оптимальніших запитів у базу даних.Звичайно, відповідь є правильною, але неповною.Мало хто згадує, що поліпшити роботу програми можна написанням оптимальніших алгоритмів або використанням структур даних, які краще розв’яжуть певну задачу. <p> Оскільки зараз процесорний час порівняно дешевий і оперативна пам’ять також, від програмістів не вимагають писати супероптимальні програми.Бо порівняно з процесорним часом і оперативною пам’яттю час програміста дуже дорогий. Написання оптимізованих програм може тривати справді довго. <em><a href="https://dou.ua/lenta/articles/why-understanding-algorithms-is-important/?from=comment-digest_post&utm_source=transactional&utm_medium=email&utm_campaign=digest-comments"> Детальніше...</a></em ></p>',
             tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: 'victrun@gmail.com',
+            author: { displayName: 'victor' },
             date: '01.10.2020, 07:54:00',
             like: 109,
             comments: 44,
         },
-    ]
+    ],
 
+    addPost(title, text, tags, handler) {
+        // Атрибути нового поста: название, текст, теги и т.д. Пост добавляеться в начало списка
+        this.allPosts.unshift({
+            title,
+            text,
+            tags: tags.split(',').map(item => item.trim()),
+            author: {
+                displayName: setUsers.user.displayName,
+                photo: setUsers.user.photo,
+            },
+            date: new Date().toLocaleString(),
+            like: 0,
+            comments: 0,
+        });
+
+        if (handler) {
+            handler();
+        }
+    },
+    
 };
 
+// Показ окна нового поста / скритие блока постов
+const showAddPost = () => {
+    addPostElem.classList.add('visible');
+    postsWrapper.classList.remove('visible');
+}
+
 // Пости на странице
-const showAllPosts = () => {
+const showAllPosts = () => {  
     let postHTML = '';
 
     setPosts.allPosts.forEach(post => {
@@ -179,10 +240,7 @@ const showAllPosts = () => {
                     <h2 class="post__title title">${title}</h2>
                     <p class="post__text text">${text}</p>
                     <div class="tags">
-                        <a class="tag" href="#">#${tags[0]}</a>
-                        <a class="tag" href="#">#${tags[1]}</a>
-                        <a class="tag" href="#">#${tags[2]}</a>
-                        <a class="tag" href="#">#${tags[3]}</a>
+                        ${tags.map(tag => `<a class="tag" href="#${tag}">#${tag}</a>` )}
                     </div>
                 </div>
                 <div class="post__footer">
@@ -212,11 +270,11 @@ const showAllPosts = () => {
                     </div>
                     <div class="post__author">
                         <div class="author__about">
-                            <a href="#" class="author__username">${author}</a>
+                            <a href="#" class="author__username">${author.displayName}</a>
                             <span class="post__time">${date}</span>
                         </div>
                         <a href="#" class="author__link">
-                            <img class="author__avatar" src="images/avatar.png" alt="avatar">
+                            <img class="author__avatar" src=${author.photo || "images/avatar.png"} alt="avatar">
                         </a>
                     </div>
                 </div>
@@ -224,7 +282,11 @@ const showAllPosts = () => {
         `;
     });
 
-    postsWrapper.innerHTML = postHTML
+    postsWrapper.innerHTML = postHTML; 
+    
+    // Показ постов после добавление нового
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.add('visible'); 
 }
 
 const init = () => {
@@ -270,7 +332,30 @@ const init = () => {
         event.preventDefault();  // отмена обычного клика по ссылке (стандартного поведения)
         menu.classList.toggle('visible');
     });
+    
+    // Добавление нового поста в общий блок
+    buttonNewPost.addEventListener('click', event => {
+        event.preventDefault();
+        showAddPost();
+    });
 
+    addPostElem.addEventListener('submit', event => {
+        event.preventDefault();
+        const { title, text, tags } = addPostElem.elements;
+
+        if (title.value.length < 6) {
+            alert('Малая длина заголовка');
+            return;
+        }
+        if (text.value.length < 50) {
+            alert('Мало символов для публикации поста');
+            return;
+        }
+
+        setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+        addPostElem.classList.remove('visible');
+        addPostElem.reset();
+    });
 
     showAllPosts();
     toggleAuthDom();  // первый запуск скроет блок личного кабинета пользователя
@@ -279,3 +364,22 @@ const init = () => {
 document.addEventListener('DOMContentLoaded', () => {
     init();
 });
+
+/*
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        var providerData = user.providerData;
+        // ...
+    } else {
+        // User is signed out.
+        // ...
+    }
+});
+*/
