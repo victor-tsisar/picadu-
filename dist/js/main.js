@@ -44,27 +44,41 @@ const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button__new-post');
 const addPostElem = document.querySelector('.add__post');
 
+const DEFAULT_PHOTO = userAvatarElem.src;
+
 // Пользователи (база)
-const listUsers = [
-    {
-        id: '01',
-        email: 'victrun@gmail.com',
-        password: '12345',
-        displayName: 'victor',
-        photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg'
-    },
-    {
-        id: '02',
-        email: 'kate@mail.ru',
-        password: '112233',
-        displayName: 'kate',
-        photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTShHa5ocpKUoavy9CUwwBycXIVhyiB1RkmcQ&usqp=CAU'
-    }
-];
+// const listUsers = [
+//     {
+//         id: '01',
+//         email: 'victrun@gmail.com',
+//         password: '123456',
+//         displayName: 'victor',
+//         photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg'
+//     },
+//     {
+//         id: '02',
+//         email: 'kate@mail.ru',
+//         password: '112233',
+//         displayName: 'kate',
+//         photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTShHa5ocpKUoavy9CUwwBycXIVhyiB1RkmcQ&usqp=CAU'
+//     }
+// ];
 
 // Форма авторизации/регистрации
 const setUsers = {
     user: null,
+    // Слушатель от firebase
+    initUser(handler) {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                this.user = user;
+            } else {
+                this.user = null;
+            }
+            if (handler) handler();
+        });
+    },
+
     // Авторизация нового пользователя
     logIn(email, password, handler) {
         // Валидация е-mail
@@ -73,76 +87,101 @@ const setUsers = {
             return;
         }
 
-        const user = this.getUser(email);
-        if(user && user.password === password) {
-            this.authorizedUser(user)
-            handler();
-        } else {
-            alert('Пользователь с такими даными не найден')
-        }
+        // Авторизация
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .catch((err) => {
+                const errCode = err.code;
+                const errMessage = err.message;
+                if (errCode === 'auth/wrong-password') {
+                    console.log(errMessage);
+                    alert('Неверный пароль!');
+                } else if (errCode === 'auth/user-not-found') {
+                    console.log(errMessage);
+                    alert('Пользователь не найден!');
+                } else {
+                    alert(errMessage)
+                }
+                console.log(err);
+            });
+    },
 
-        if (handler) {
-            handler();
-        }
-        console.log(email, password);
+    logOut() {
+        // Выход с системы
+        firebase.auth().signOut();
     },
-    logOut(handler) {
-        this.user = null;
-        if (handler) {
-            handler();
-        }
-    },
+
     // Регистрация нового пользователя
     signUp(email, password, handler) {
         if (!regExpValidEmail.test(email)) {
             alert('E-mail не валиден')
             return;
         }
-        
+
         // Проверка введены ли даные пользователем
         if (!email.trim() || !password.trim()) {
             alert('Введите даные!');
             return;
         }
-        // Момент регистрации
-        if(!this.getUser(email)) {
-            const user = {
-                email, password, displayName: email.match(/[-.\w]+[^@]/)[0]
-            }
-            // Момент добавления в базу/список
-            listUsers.push(user);
-            // Момент авторизации
-            this.authorizedUser(user)
-            // Момент скрития блока авторизации / отображения личного кабинета
-            handler();
-        } else {
-            alert('Пользователь с такими даными уже зарегистрирован!')
-        }
+        // Регистрация
+        firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((data) => {
+                this.editUser(email.substring(0, email.indexOf('@')), null, handler);
+            })
+            .catch((err) => {
+                const errCode = err.code;
+                const errMessage = err.message;
+                if (errCode === 'auth/weak-password') {
+                    console.log(errMessage);
+                    alert('Слабый пароль!');
+                } else if (errCode === 'auth/email-already-in-use') {
+                    console.log(errMessage);
+                    alert('E-mail уже используеться!');
+                } else {
+                    alert(errMessage)
+                }
+            });
+    },
 
-        if (handler) {
-            handler();
-        }
-    },
     // Прийом логина пользователя и аватара
-    editUser(userName, userPhoto = '', handler) {
-        if (userName) {
-            this.user.displayName = userName;
-        }
-        if (userPhoto) {
-            this.user.photo = userPhoto;
-        }
-        if (handler) {
-            handler();
+    editUser(displayName, photoURL, handler) {
+
+        // Получение текущего пользователя для окна редактирования
+        const user = firebase.auth().currentUser;
+
+        if (displayName) {
+            if (photoURL) {
+                user.updateProfile({
+                    displayName,
+                    photoURL
+                }).then(handler)
+            } else {
+                user.updateProfile({
+                    displayName
+                }).then(handler) 
+            } 
         }
     },
-    // Проверка e-mail пользователя в базе listUsers
-    getUser(email) {
-        return listUsers.find((item) => item.email === email)
-    },
-    // Запись введеных даных при авторизации пользователя
-    authorizedUser(user) {
-        this.user = user;
+
+    // Когда пользователь забыл пароль
+    sendForget(email) {
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Письмо отправлено!')
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
+
+    // Проверка e-mail пользователя в базе listUsers
+    // getUser(email) {
+    //     return listUsers.find((item) => item.email === email)
+    // },
+    // Запись введеных даных при авторизации пользователя
+    // authorizedUser(user) {
+    //     this.user = user;
+    // }
 };
 
 // Активация личного кабинета после удачной авторизации/регистрации
@@ -154,7 +193,7 @@ const toggleAuthDom = () => {
         loginElem.style.display = 'none';
         userElem.style.display = '';
         userNameElem.textContent = user.displayName;
-        userAvatarElem.src = user.photo || userAvatarElem.src;  // Добавление аватара или оставить по умолчанию
+        userAvatarElem.src = user.photoURL || DEFAULT_PHOTO;  // Добавление аватара или оставить по умолчанию
         buttonNewPost.classList.add('visible');  //Отображение кнопки публикации поста        
     } else {
         loginElem.style.display = '';
@@ -168,55 +207,46 @@ const toggleAuthDom = () => {
 // Добавление постов на страницу
 const setPosts = {
     allPosts: [
-        {
-            title: 'ШПАРГАЛКА ДЛЯ МОЛНИЕНОСНОСТНОЙ ВЕРСТКИ',
-            text: 'Сокращение при помощи плагина EMMET, позволяет значительно увеличить скорость верстки за счет комбинации команд и аббревиатур.Так же можно дополнительно делать свои аббревиатуры. <p> EMMET прост в установке интегрируется в такие редакторы как PHPStorm, Sublime Text, Adobe Dreamviewer, Notepad++, WebStorm, Aptana, Coda, TextMate, Eclipse, CodeMirror, Brackets, Emacs, HippoEDIT, HTML - Kit и други, полный их перечень найдете на сайте EMMET.</p>',
-            tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: { displayName: 'victor', photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg'},
-            date: '11.10.2020, 10:54:00',
-            like: 45,
-            comments: 20,
-        },
-        {
-            title: 'Преимущества Sass',
-            text: 'Полная совместимость с CSS <br> Sass полностью совместим со всеми версиями CSS.Мы уделяем серьезное внимание совместимости, поэтому вы можете легко использовать любые доступные библиотеки CSS. <p> Богатая функциональность <br> Sass может похвастаться большим количеством возможностей, чем любой другой язык расширения CSS. Команда Sass Core бесконечно работает не только для поддержания этих возможностей, но и для того, чтобы быть впереди. Sass находится в активной разработке более 8 лет. </p> <p> Фреймворки <br> Есть бесконечное количество фреймворков, построенных на Sass. Compass, Bourbon и Susy - это только несколько примеров из всего количества.</p>', 
-            tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: { displayName: 'Kate', photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTShHa5ocpKUoavy9CUwwBycXIVhyiB1RkmcQ&usqp=CAU' },
-            date: '10.11.2020, 20:05:00',
-            like: 68,
-            comments: 17,
-        },
-        {
-            title: 'Опановуємо основи алгоритмів',
-            text: 'Коли на співбесідах запитую, як можна підвищити продуктивність роботи вебсервісу, основними відповідями є вертикальне та  горизонтальне масштабування, використання різних типів кешів, створення індексів у базі даних і написання оптимальніших запитів у базу даних.Звичайно, відповідь є правильною, але неповною.Мало хто згадує, що поліпшити роботу програми можна написанням оптимальніших алгоритмів або використанням структур даних, які краще розв’яжуть певну задачу. <p> Оскільки зараз процесорний час порівняно дешевий і оперативна пам’ять також, від програмістів не вимагають писати супероптимальні програми.Бо порівняно з процесорним часом і оперативною пам’яттю час програміста дуже дорогий. Написання оптимізованих програм може тривати справді довго. <em><a href="https://dou.ua/lenta/articles/why-understanding-algorithms-is-important/?from=comment-digest_post&utm_source=transactional&utm_medium=email&utm_campaign=digest-comments"> Детальніше...</a></em ></p>',
-            tags: ['свежее', 'горячее', 'мое', 'случайность'],
-            author: { displayName: 'victor' },
-            date: '01.10.2020, 07:54:00',
-            like: 109,
-            comments: 44,
-        },
+        // {
+        //     title: 'ШПАРГАЛКА ДЛЯ МОЛНИЕНОСНОСТНОЙ ВЕРСТКИ',
+        //     text: 'Сокращение при помощи плагина EMMET, позволяет значительно увеличить скорость верстки за счет комбинации команд и аббревиатур.Так же можно дополнительно делать свои аббревиатуры. <p> EMMET прост в установке интегрируется в такие редакторы как PHPStorm, Sublime Text, Adobe Dreamviewer, Notepad++, WebStorm, Aptana, Coda, TextMate, Eclipse, CodeMirror, Brackets, Emacs, HippoEDIT, HTML - Kit и други, полный их перечень найдете на сайте EMMET.</p>',
+        //     tags: ['EMMET', 'верстка', 'сокращение'],
+        //     author: { displayName: 'man', photo: 'https://i.pinimg.com/474x/b7/ac/72/b7ac72adb88d04be0eef89b39bba7d61.jpg' },
+        //     date: '11.10.2020, 10:54:00',
+        //     like: 45,
+        //     comments: 20,
+        // }   
     ],
 
     addPost(title, text, tags, handler) {
         // Атрибути нового поста: название, текст, теги и т.д. Пост добавляеться в начало списка
+        const user = firebase.auth.currentUser;
+
         this.allPosts.unshift({
+            id: `postID${(+new Date()).toString(16)}`,  // генерация уникального іd... -${user.uid}
             title,
             text,
             tags: tags.split(',').map(item => item.trim()),
             author: {
                 displayName: setUsers.user.displayName,
-                photo: setUsers.user.photo,
+                photo: setUsers.user.photoURL,
             },
             date: new Date().toLocaleString(),
             like: 0,
             comments: 0,
         });
 
-        if (handler) {
-            handler();
-        }
+        // Добавление постов в базу и их отображение
+        firebase.database().ref('post').set(this.allPosts)
+            .then(() => this.getPosts(handler))
     },
-    
+
+    getPosts(handler) {
+        firebase.database().ref('post').on('value', snapshot => {
+            this.allPosts = snapshot.val() || [];
+            handler();
+        })
+    }
 };
 
 // Показ окна нового поста / скритие блока постов
@@ -226,7 +256,7 @@ const showAddPost = () => {
 }
 
 // Пости на странице
-const showAllPosts = () => {  
+const showAllPosts = () => {
     let postHTML = '';
 
     setPosts.allPosts.forEach(post => {
@@ -240,7 +270,7 @@ const showAllPosts = () => {
                     <h2 class="post__title title">${title}</h2>
                     <p class="post__text text">${text}</p>
                     <div class="tags">
-                        ${tags.map(tag => `<a class="tag" href="#${tag}">#${tag}</a>` )}
+                        ${tags.map(tag => `<a class="tag" href="#${tag}">#${tag}</a>`)}
                     </div>
                 </div>
                 <div class="post__footer">
@@ -282,11 +312,11 @@ const showAllPosts = () => {
         `;
     });
 
-    postsWrapper.innerHTML = postHTML; 
-    
+    postsWrapper.innerHTML = postHTML;
+
     // Показ постов после добавление нового
     addPostElem.classList.remove('visible');
-    postsWrapper.classList.add('visible'); 
+    postsWrapper.classList.add('visible');
 }
 
 const init = () => {
@@ -311,7 +341,7 @@ const init = () => {
     // Выход по клику кнопки
     exitElem.addEventListener('click', event => {
         event.preventDefault();
-        setUsers.logOut(toggleAuthDom);
+        setUsers.logOut();
     });
 
     // Активация окна редактирования для даных пользователя (фото, логин)
@@ -332,7 +362,7 @@ const init = () => {
         event.preventDefault();  // отмена обычного клика по ссылке (стандартного поведения)
         menu.classList.toggle('visible');
     });
-    
+
     // Добавление нового поста в общий блок
     buttonNewPost.addEventListener('click', event => {
         event.preventDefault();
@@ -357,29 +387,23 @@ const init = () => {
         addPostElem.reset();
     });
 
-    showAllPosts();
-    toggleAuthDom();  // первый запуск скроет блок личного кабинета пользователя
+    // События при забыл пароль
+    loginForget.addEventListener('click', event => {
+        event.preventDefault();
+        setUsers.sendForget(emailInput.value);
+        emailInput.value = '';
+    });
+
+    setUsers.initUser(toggleAuthDom);
+    setPosts.getPosts(showAllPosts);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
 });
 
-/*
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        // User is signed in.
-        var displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        var providerData = user.providerData;
-        // ...
-    } else {
-        // User is signed out.
-        // ...
-    }
-});
-*/
+//  Возможные доработки:
+// - модальное окно создания новых постов,
+// - реализация кнопок добавления видео/аудио
+// - подключение коментариев и лайков
+// - вывод коментария в боковую панель
